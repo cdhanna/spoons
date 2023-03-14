@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Spoons</name>
+    </assembly>
+    <members>
+        <member name="M:Beamable.Spoons.Program.Main">
+            <summary>
+            The entry point for the <see cref="T:Beamable.Spoons.Spoons"/> service.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2745c878d35ad4c7f8c2566b945f193f, type: 3}
+  m_Name: faces
+  m_EditorClassIdentifier: 
+  dataEntries:
+  - sprite: {fileID: 3508617790237849787, guid: 83204fe8c32aa4103a37e8e3d13ca3fe,
+      type: 3}
+    annoyedRating: 1
+  - sprite: {fileID: 568270206104411521, guid: 8f425e0ff1f85462ba8e410725ece3a0, type: 3}
+    annoyedRating: 2
+  - sprite: {fileID: 4178553098831347557, guid: 5214883cc530a41dd981947b700b29dd,
+      type: 3}
+    annoyedRating: 3
+  - sprite: {fileID: 6604432948315633879, guid: be9057db3b47449f0802a12937ee5b08,
+      type: 3}
+    annoyedRating: 4
+  - sprite: {fileID: 4235141413701105602, guid: eaf16b9ac628d4556a7e72afe48da013,
+      type: 3}
+    annoyedRating: 5
+  - sprite: {fileID: 4727800283039338243, guid: 5aaaeaca41fbc468eb65b5e5a309fbd6,
+      type: 3}
+    annoyedRating: 6
+  - sprite: {fileID: 3513514912199536266, guid: 5fd9d01a47b3d4cf886c6ab66399acc3,
+      type: 3}
+    annoyedRating: 7
+  - sprite: {fileID: 4290817530000319323, guid: 195b746ba063b48e98adfc370ee07c15,
+      type: 3}
+    annoyedRating: 8
+  - sprite: {fileID: 2123324222064366362, guid: 92d7d6021badb4d98833a1252a75baf9,
+      type: 3}
+    annoyedRating: 9
+  - sprite: {fileID: 7652492735972862274, guid: 193206b4136a646e4bcd284ce3d97b83,
+      type: 3}
+    annoyedRating: 10
+  hairs:
+  - sprite: {fileID: 0}
+    weight: 3
+  - sprite: {fileID: 21300000, guid: 88c0c380efb53468c973be35a01f41f5, type: 3}
+    weight: 1
+  - sprite: {fileID: 21300000, guid: ca5c132a78a774cfa91ea985e599a9d5, type: 3}
+    weight: 1
+  - sprite: {fileID: 21300000, guid: c073365aa4eb64cb6804d1f31b64a703, type: 3}
+    weight: 1
+  - sprite: {fileID: 21300000, guid: 9114dfdb52a73452285f2facc4782ab2, type: 3}
+    weight: 1
+  glasses:
+  - sprite: {fileID: 0}
+    weight: 3
+  - sprite: {fileID: 21300000, guid: ffa395d6a1fc548f0bfdc738a8825493, type: 3}
+    weight: 1
+  - sprite: {fileID: 21300000, guid: f097bab7e54d845178966576595afb0f, type: 3}
+    weight: 1
+  - sprite: {fileID: 21300000, guid: c4d07d18b5e374fd5b8eb8039258895e, type: 3}
+    weight: 1
+  stashes:
+  - sprite: {fileID: 0}
+    weight: 3
+  - sprite: {fileID: 21300000, guid: 1adf84786e25c425cb7b3350231a1846, type: 3}
+    weight: 1
+  - sprite: {fileID: 21300000, guid: 02a3650eb57cd44ad88a860ad1854059, type: 3}
+    weight: 1
+  - sprite: {fileID: 21300000, guid: 42245a6983c03430f9b0ecff02ddf15f, type: 3}
+    weight: 0.4
+  skinTones:
+  - {r: 1, g: 0.9648276, b: 0.745, a: 1}
+  - {r: 0.98039216, g: 0.94076365, b: 0.85490197, a: 1}
+  - {r: 0.2924528, g: 0.17962255, b: 0.08919811, a: 1}
+  - {r: 1, g: 0.86907804, b: 0.71599996, a: 1}
+  hairTones:
+  - {r: 1, g: 0.9310644, b: 0.5518868, a: 1}
+  - {r: 0.4339623, g: 0.25097856, b: 0.116678536, a: 1}
+  - {r: 0.3584906, g: 0.2633148, b: 0.19446422, a: 1}
+  - {r: 0.6037736, g: 0.46411315, b: 0.03702387, a: 1}
+  - {r: 0.3584906, g: 0.19134527, b: 0.17079033, a: 1}
+  - {r: 0.25355998, g: 0.55291635, b: 0.6981132, a: 1}
+  - {r: 0.6371933, g: 0.25490198, b: 0.69803923, a: 1}
+  - {r: 0.16981131, g: 0.1610434, b: 0.1225525, a: 1}
