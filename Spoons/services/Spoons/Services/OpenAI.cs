@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Beamable.Common;
 using Beamable.Server;
 using Beamable.Server.Api.Notifications;
+using Beamable.Server.Api.RealmConfig;
 using Newtonsoft.Json;
 using SpoonsCommon;
 
@@ -14,18 +15,17 @@ public class OpenAI
 {
     private const string URL = "https://api.openai.com/v1/completions";
     
-    // TODO: Move this into a config!!!
-    private const string KEY = "REDACTED";
-
     private readonly RequestContext _ctx;
     private readonly HttpClient _httpClient;
     private readonly IMicroserviceNotificationsApi _notifications;
+    private readonly Config _config;
 
-    public OpenAI(RequestContext ctx, HttpClient httpClient, IMicroserviceNotificationsApi notifications)
+    public OpenAI(RequestContext ctx, HttpClient httpClient, IMicroserviceNotificationsApi notifications, Config config)
     {
         _ctx = ctx;
         _httpClient = httpClient;
         _notifications = notifications;
+        _config = config;
     }
 
     public async Promise Send(ConvoRequest request)
@@ -38,7 +38,7 @@ public class OpenAI
         var json = JsonConvert.SerializeObject(model);
         
         var req = new HttpRequestMessage(HttpMethod.Post, URL);
-        req.Headers.Add("Authorization", $"Bearer {KEY}");
+        req.Headers.Add("Authorization", $"Bearer {_config.OpenApiKey}");
         req.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var order = 0;

@@ -11,14 +11,13 @@ namespace Beamable.Spoons.Services;
 
 public class ScenarioGG
 {
-    private const string API_KEY =
-        "REDACTED";
-    
     private readonly HttpClient _client;
+    private readonly Config _config;
 
-    public ScenarioGG(HttpClient client)
+    public ScenarioGG(HttpClient client, Config config)
     {
         _client = client;
+        _config = config;
     }
 
     public async Promise<ScenarioGGImage> GetRandomURL()
@@ -36,7 +35,7 @@ public class ScenarioGG
         var url = $"https://api.cloud.scenario.gg/v1/models/{modelId}/inferences";
         
         var req = new HttpRequestMessage(HttpMethod.Get, url);
-        req.Headers.Add("Authorization", API_KEY);
+        req.Headers.Add("Authorization", $"Basic {_config.ScenarioGGKey}");
 
         var res = await _client.SendAsync(req);
         var jsonRes = await res.Content.ReadAsStringAsync();

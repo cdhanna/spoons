@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Beamable.Common;
 using Beamable.Server;
+using Beamable.Server.Api.RealmConfig;
 using Beamable.Spoons.Services;
 using SpoonsCommon;
 
@@ -16,8 +18,16 @@ namespace Beamable.Spoons
 		public static void Configure(IServiceBuilder builder)
 		{
 			builder.Builder.AddScoped<OpenAI>();
+			builder.Builder.AddSingleton<Config>();
 			builder.Builder.AddSingleton<ScenarioGG>();
 			builder.Builder.AddSingleton<HttpClient>(p => new HttpClient());
+		}
+
+		[InitializeServices()]
+		public static async Task Init(IServiceInitializer init)
+		{
+			var config = init.GetService<Config>();
+			await config.Init();
 		}
 
 		[ClientCallable]
