@@ -4,6 +4,8 @@ Shader "Unlit/BackgroundUnlit"
     {
         _MainTex ("Texture", 2D) = "white" {}
         _X ("X", Float) = 0
+        _HouseLine ("HouseLine", Float) = 0
+        _Sizes ("Sizes", Vector) = (1,1,1,1)
         _XSpeed ("XSpeed", Float) = 0
         _BackLayerOffset ("BackLayerOffset", Float) = 0
         _Sidewalk("Sidwalk color", Color) = (.25, .5, .5, 1)
@@ -48,8 +50,10 @@ Shader "Unlit/BackgroundUnlit"
             float4 _Sky;
             float4 _SkyLow;
             float4 _Grass;
+            float4 _Sizes;
             float _X;
             float _XSpeed;
+            float _HouseLine;
             float _BackLayerOffset;
             float3 _HouseLayer1;
             float3 _HouseLayer2;
@@ -64,25 +68,36 @@ Shader "Unlit/BackgroundUnlit"
                 return o;
             }
 
-            float random(float2 x) {
-               return frac(sin(dot(x,float2(12.9898,78.233)))*43758.5453123);
+            // float random(float x) {
+            //    return frac(sin(dot(x,float2(12.988,78.233)))*43758.54523);
+            // }
+            float random (float2 uv)
+            {
+                return frac(sin(dot(uv,float2(12.9898,78.233)))*43758.5453123);
             }
             
             float houseLayer(float2 uv, float groundLevel, float2 offset)
             {
+               
                 float buildingHeight = .3;
                 float buildingTop = groundLevel + buildingHeight;
                 // float g = uv.y < groundLevel;
                 float b = uv.y < buildingTop && uv.y > groundLevel;
+                // return b;
                 float buildingY = (uv.y - groundLevel) / buildingHeight;
                 float buildingScale = 10;
-                float2 buildingUv = float2(frac(uv.x * buildingScale), buildingY) *2 - 1;
-                float2 buildingGv = (float2(uv.x * buildingScale, buildingY) * 2 - 1) - buildingUv;
+                float2 buildingUv = float2(frac(uv.x * buildingScale), buildingY);
+                float2 buildingGv = float2(floor(uv.x * buildingScale), 0);
+
+                buildingUv = buildingUv * 2 - 1;
                 float r = random(buildingGv);
-                buildingUv.x += r * .3;
+                // return r * .2;
+                buildingUv.x += (r * 2 - 1) * .2;
+                
                 // buildingUv.x *= scale.x;
                 buildingUv.y += offset.y;
-                float roof = smoothstep(.6, .5, buildingUv.y + abs(buildingUv.x));
+                float roof = smoothstep(.6, .55, buildingUv.y + abs(buildingUv.x));
+                
                 roof *= buildingUv.y > -.2;
                 float building = abs(buildingUv.x ) < (.5+offset.x) && buildingUv.y < 0;
                 float house = max(building,roof);
@@ -94,11 +109,14 @@ Shader "Unlit/BackgroundUnlit"
             {
                 // sample the texture
 
+                fixed4 backgroundColor = tex2D(_MainTex, i.uv);
+                // return col2;
+                
                 float4 col = 1;
                 _X *= _XSpeed;
                 i.uv.x += _X;
 
-                float groundLevel = .2;
+                float groundLevel = _HouseLine;
                 // float buildingHeight = .3;
                 // float buildingTop = groundLevel + buildingHeight;
                 float g = i.uv.y < groundLevel;
@@ -148,13 +166,27 @@ Shader "Unlit/BackgroundUnlit"
                 sidewalk *= .2 + (1 - sideWalkUv.y);
                 
                 col.rgb = g * sidewalk;
+                col.rgb = 0;
 
                 float skyY = (i.uv.y - groundLevel) / (1 - groundLevel);
-                col.rgb += s * lerp(_SkyLow, _Sky, skyY);
+                // skyY = i.uv.y;
+                col.rgb = lerp(_SkyLow, _Sky, skyY);
+                // return col;
+                // return 0;
+
+                // return col2.a;
+                
+                // return lerp(col, col2, .5);
+                // col.rgb = s * skyY;
+
                 col.rgb = (1-house3) * col.rgb +  _HouseLayer3 * house3;
                 col.rgb = (1-house2) * col.rgb +  _HouseLayer2 * house2;
                 col.rgb = (1-house) * col.rgb +  _HouseLayer1 * house;
-                // col.rgb = s * skyY;
+
+                // col.rgb = skyY;
+                col.rgb = (1-backgroundColor.a) * col.rgb + backgroundColor.a * backgroundColor.rgb;
+
+
                 
                 return col;
             }

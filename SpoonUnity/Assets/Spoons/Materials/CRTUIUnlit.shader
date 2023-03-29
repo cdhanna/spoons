@@ -282,8 +282,8 @@ float2 crtCurve(float2 uv, float r, bool content, bool shine)
                 float2 vig = smoothstep(0, v, invertAbsUv);
                 float vigMask = vig.x * vig.y;
                 
-                // fixed4 col = tex2D(_MainTex, mappedUv);
-                fixed4 col = distort(mappedUv, _Time.x * .2);
+                fixed4 col = tex2D(_MainTex, mappedUv);
+                // fixed4 col = distort(mappedUv, _Time.x * .2);
 
                 // fixed4 col2 = distort(i.uv, _Time.y);
                 // col2.rg = i.uv;

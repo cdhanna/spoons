@@ -119,6 +119,12 @@ namespace Beamable.Spoons
 				prompt = BuildRequestMessage(convo)
 			};
 			
+			/*
+			 * container
+			 * connection (websocket connection)
+			 * request
+			 */
+			
 			var _ = oai.Send(request); // TODO: this leaves a dangling process, and it would be good to prevent service shutdown on this completing... Expose the monitor api.
 			
 			await Services.Inventory.Update(b => b.CurrencyChange("currency.visits", 1));

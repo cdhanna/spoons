@@ -69,7 +69,7 @@
         <WriteLinesToFile File="$(OutDir)/baseImageDocs.xml" Lines="$(BeamableBaseDocs)" Overwrite="true" />
 
         <Message Text="Creating beamable .env file..." Importance="high" />
-        <Exec Command="$(BeamableTool) project generate-env $(OutDir)" />
+        <Exec Command="$(BeamableTool) project generate-env $(OutDir) --include-prefix=false" />
         <WriteLinesToFile File="$(OutDir)/.env" Lines="BEAMABLE_SDK_VERSION_EXECUTION=$(BeamableVersion)" Overwrite="false" />
     </Target>
     
@@ -93,8 +93,8 @@
 
     <!-- Nuget references -->
     <ItemGroup>
-        <PackageReference Include="Beamable.Common" Version="1.13.0" />
-        <PackageReference Include="Beamable.Microservice.Runtime" Version="1.13.0" />
+        <PackageReference Include="Beamable.Common" Version="1.12.0" />
+        <PackageReference Include="Beamable.Microservice.Runtime" Version="1.12.0" />
         <PackageReference Include="EmbedIO" Version="3.4.*" />
         <PackageReference Include="LoxSmoke.DocXml" Version="3.4.*" />
         <PackageReference Include="System.Threading.RateLimiting" Version="7.0.0" />

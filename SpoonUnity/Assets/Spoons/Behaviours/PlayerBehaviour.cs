@@ -38,7 +38,6 @@ public class PlayerBehaviour : MonoBehaviour
 	public int rotateIndex;
 	public float distanceTravelled;
 	private GameStateService _stateService;
-	private MaterialPropertyBlock _backgroundBlock;
 
 	// Start is called before the first frame update
     async void Start()
@@ -48,6 +47,9 @@ public class PlayerBehaviour : MonoBehaviour
 	    
 	    _stateService = ctx.GameStateService();
 
+	    
+	    hat.SetActive(ctx.GameStateService().data.hasHat);
+	    tie.SetActive(ctx.GameStateService().data.hasTie);
 	    _stateService.OnStateChanged += (state, gameState) =>
 	    {
 		    hat.SetActive(ctx.GameStateService().data.hasHat);
@@ -106,12 +108,6 @@ public class PlayerBehaviour : MonoBehaviour
 	    standingSuitcase.SetActive(!isMoving);
 	    movingSuitcase.SetActive(isMoving);
 
-	    if (_backgroundBlock == null)
-	    {
-		    _backgroundBlock = new MaterialPropertyBlock();
-	    }
-	    _backgroundBlock?.SetFloat("_X", tracker.transform.position.x);
-	    background.SetPropertyBlock(_backgroundBlock);
 	    // background.transform.position = new Vector3(transform.position.x, background.transform.position.y, 0);
     }
 }

@@ -88,4 +88,5 @@ public class GameData
 	public bool hasTie;
 	public int sales;
 	public int slams;
+	public long simulatedUnixSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 }

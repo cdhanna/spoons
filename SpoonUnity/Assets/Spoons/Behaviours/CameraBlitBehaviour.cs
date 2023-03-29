@@ -6,9 +6,6 @@ using UnityEngine;
 [ExecuteInEditMode, ImageEffectAllowedInSceneView]
 public class CameraBlitBehaviour : MonoBehaviour
 {
-
-	public Camera selfCamera;
-
 	public Material crtMaterial;
 
 	public Material backgroundMaterial;
@@ -34,8 +31,8 @@ public class CameraBlitBehaviour : MonoBehaviour
 	    if (backgroundMaterial != null)
 	    {
 		    var desc = src.descriptor;
-		    desc.width /= 5;
-		    desc.height /= 5;
+		    desc.width /= 2;
+		    desc.height /= 2;
 		    
 		    var temp = RenderTexture.GetTemporary(desc);
 		    temp.filterMode = FilterMode.Point;

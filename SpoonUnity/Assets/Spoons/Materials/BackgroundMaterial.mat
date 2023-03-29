@@ -66,6 +66,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _HouseLine: 0.24
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -74,17 +75,18 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _X: -0.12
+    - _X: 0
     - _XSpeed: 0.1
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Grass: {r: 0.15696344, g: 0.735849, b: 0.05206478, a: 1}
-    - _HouseLayer1: {r: 0.19544323, g: 0.20170294, b: 0.2264151, a: 1}
+    - _HouseLayer1: {r: 0.21809362, g: 0.22299117, b: 0.2735849, a: 1}
     - _HouseLayer2: {r: 0.12602349, g: 0.1509434, b: 0.1509434, a: 1}
     - _HouseLayer3: {r: 0, g: 0, b: 0, a: 1}
     - _Sidewalk: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
-    - _Sky: {r: 0.3679245, g: 0.1440459, b: 0.15246674, a: 1}
-    - _SkyLow: {r: 0, g: 0.43488678, b: 0.8666667, a: 1}
+    - _Sizes: {r: 1, g: 1, b: 1, a: 1}
+    - _Sky: {r: 0.021982923, g: 0.15927805, b: 0.3584906, a: 1}
+    - _SkyLow: {r: 0.04071733, g: 0.35492334, b: 0.5754717, a: 1}
   m_BuildTextureStacks: []
