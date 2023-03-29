@@ -1,6 +1,9 @@
 # Spoons Source
 This is the in-development source code for a game called _Would You Like To Buy A Spoon?_ (WYLT-BAS). This project is in active development and I intend to release it on Steam when it is complete. However, I plan to keep the source code open, accessible, and free.
 
+![spoons](https://user-images.githubusercontent.com/3848374/228410797-9b1236f1-0aae-4509-854e-c06647d38dd7.gif)
+
+
 ## Overview
 WYLT-BAS is a game about the future of work and human creativity in the dawn of the AI age. In the game, the player assumes the role of a sales-person for a fake company, _Meta-American_, and must take on the job of selling spoons in a door to door virtual world. The inhabitants of the virtual houses are powered by [OpenAI's _text-davinci-003_ model](https://platform.openai.com/docs/api-reference/completions/create). The houses themselves are generated via [Scenario's](https://www.scenario.com/) image generator (trained on a limited model of my own design). The game's architecture is built on [Beamable](https://docs.beamable.com/docs).
 
