@@ -46,3 +46,5 @@ Once all of these steps have been taken, you are ready to start running the prog
 * [Shapeforms Audio Free Sound Effects](https://assetstore.unity.com/packages/audio/sound-fx/shapeforms-audio-free-sound-effects-183649) - This is a free asset with some great sound effects including the tape effects. 
 * [Procedural Music Generator](https://assetstore.unity.com/packages/audio/music/procedural-music-generator-192532) - This is a free asset that I took the instrumental sound effects from.
 * [officina27](https://pixabay.com/music/pulses-00-officina-zanchi-synt-bells-4697/) - The artist who created the menacing background music.
+
+The CRT effect used in the game is available as a standalone effect on [Github](https://github.com/cdhanna/CRT-Unity), and will be available on the Unity Asset Store after it finishes going through review.
