@@ -3,10 +3,9 @@ name: push
 on:
   push:
     branches:
-      - 'master'
       - 'main'
     paths:
-      - './SpoonsUnity/**'
+      - './SpoonUnity/**'
 
 jobs:
 
@@ -21,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         projectPath:
-          - ./SpoonsUnity/
+          - ./SpoonUnity/
         testMode:
           - playmode
           - editmode
@@ -71,7 +70,7 @@ jobs:
         unityVersion:
           - 2021.3.11f1
         projectPath:
-          - ./SpoonsUnity/
+          - ./SpoonUnity/
     steps:
       - uses: actions/checkout@v2
         with:
