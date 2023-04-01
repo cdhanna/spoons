@@ -1,0 +1,106 @@
+name: push
+
+on:
+  push:
+    branches:
+      - 'master'
+      - 'main'
+    paths:
+      - 'SpoonsUnity/**'
+
+jobs:
+
+  testAllModes:
+    timeout-minutes: 30
+    name: Tests ${{ matrix.unityVersion }} ${{ matrix.testMode }}
+    runs-on: ubuntu-latest
+    concurrency:
+      group: unity-tests-${{ matrix.unityVersion }}-${{ matrix.testMode }}-${{ github.head_ref }}
+      cancel-in-progress: true
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - ./SpoonsUnity/
+        testMode:
+          - playmode
+          - editmode
+        unityVersion:
+          - 2021.3.11f1
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Unity Folders
+        uses: actions/cache@v2
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.projectPath }}-${{ matrix.unityVersion }}
+          restore-keys: |
+            Library-${{ matrix.projectPath }}-${{ matrix.unityVersion }}
+      - uses: game-ci/unity-test-runner@v2
+        id: tests
+        timeout-minutes: 20
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          testMode: ${{ matrix.testMode }}
+          unityVersion: ${{ matrix.unityVersion }}
+          artifactsPath: ${{ matrix.testMode }}-${{ matrix.unityVersion }}-artifacts
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: ${{ matrix.unityVersion }} ${{ matrix.testMode }} Test Results
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: Test results for ${{ matrix.unityVersion }} ${{ matrix.testMode }}
+          path: ${{ steps.tests.outputs.artifactsPath }}
+          retention-days: 3
+
+  build:
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    concurrency:
+      group: device-builds-${{ matrix.targetPlatform }}-${{ github.head_ref }}
+      cancel-in-progress: true
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - WebGL
+          - StandaloneWindows
+        unityVersion:
+          - 2021.3.11f1
+        projectPath:
+          - ./SpoonsUnity/
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Cache Unity Folders
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ matrix.projectPath }}/Library
+            ${{ matrix.projectPath }}/Temp
+            ${{ matrix.projectPath }}/obj
+          key: Library-${{ matrix.projectPath }}-${{ matrix.unityVersion }}-${{ matrix.targetPlatform }}
+          restore-keys: |
+            Library-${{ matrix.projectPath }}-${{ matrix.unityVersion }}-${{ matrix.targetPlatform }}
+      - uses: game-ci/unity-builder@v2
+        timeout-minutes: 30
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          unityVersion: ${{ matrix.unityVersion }}
+          projectPath: ${{ matrix.projectPath }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          allowDirtyBuild: true
+          buildsPath: dist
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Build-${{ matrix.targetPlatform }}
+          path: dist/${{ matrix.targetPlatform }}
+          retention-days: 3

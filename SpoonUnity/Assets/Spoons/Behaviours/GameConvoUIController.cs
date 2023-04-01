@@ -51,9 +51,12 @@ public class GameConvoUIController : MonoBehaviour
 	public int suddenSoundIndex;
 	public Convo convo;
 	public List<MessageFieldBehaviour> messageInstances = new List<MessageFieldBehaviour>();
+	public MessageFieldBehaviour mostRecentMessageInstance;
 	public bool isPlayerTurn;
 	public bool isShowingUserTurn;
 	public bool isGameOver;
+	public bool slamPending;
+	public bool salePending;
 	public FaceConfig faceConfig;
 	private Dictionary<int, FaceBehaviour> _ratingToFace = new Dictionary<int, FaceBehaviour>();
 	public List<FaceBehaviour> _allFaces = new List<FaceBehaviour>(); 
@@ -112,6 +115,8 @@ public class GameConvoUIController : MonoBehaviour
 	    faceConfig = faceObject.RandomConfig();
 
 	    isPlayerTurn = false;
+	    slamPending = false;
+	    salePending = false;
 	    isGameOver = false;
 	    isShowingUserTurn = false;
 	    for (var i = 0; i < scrollArea.childCount; i++)
@@ -121,6 +126,7 @@ public class GameConvoUIController : MonoBehaviour
 
 	    convo = null;
 	    messageInstances.Clear();
+	    mostRecentMessageInstance = null;
 	    SetForAiTurn();
     }
     public async Promise StartConvo()
@@ -144,6 +150,18 @@ public class GameConvoUIController : MonoBehaviour
 
     private void OnSale(ConvoAIMessageOutcome obj)
     {
+	    salePending = true;
+    }
+
+    private void OnSlam()
+    {
+	    slamPending = true;
+    }
+
+    private void ProcessPendingSale()
+    {
+	    if (!salePending) return;
+	    salePending = false;
 	    SoundManager.Instance.sfxSource.PlayOneShot(winSounds[Random.Range(0,winSounds.Length)]);
 	    isGameOver = true;
 
@@ -163,9 +181,11 @@ public class GameConvoUIController : MonoBehaviour
 
 	    SetForAiTurn();
     }
-
-    private void OnSlam()
+    
+    private void ProcessPendingSlam()
     {
+	    if (!slamPending) return;
+	    slamPending = false;
 	    SoundManager.Instance.sfxSource.PlayOneShot(lossSounds[Random.Range(0,lossSounds.Length)]);
 
 	    var submitText = submitButton.GetComponentInChildren<TextMeshProUGUI>();
@@ -179,14 +199,14 @@ public class GameConvoUIController : MonoBehaviour
 	    lossText.transform.DOPunchScale(Vector3.one * .1f, .2f);
 
 	    winIcon.gameObject.SetActive(false);
-	    lossText.text = lossTextOptions[Random.Range(0, winTextOptions.Length)];
+	    lossText.text = lossTextOptions[Random.Range(0, lossTextOptions.Length)];
 
 	    
 	    isGameOver = true;
 	    if (messageInstances[messageInstances.Count - 1].Message is ConvoAIMessage aiMessage)
 	    {
-		    messageInstances[messageInstances.Count - 1].useTypeWriter = false;
-			aiMessage.message = aiMessage.message.Replace("slam", "<b>**Slams the Door**</b>");
+		    // messageInstances[messageInstances.Count - 1].useTypeWriter = false;
+		    // aiMessage.message = aiMessage.message.Replace("slam", "<b>**Slams the Door**</b>");
 	    }
 	    giveUpButton.GetComponentInChildren<TextMeshProUGUI>().text = "Leave";
 
@@ -211,6 +231,7 @@ public class GameConvoUIController : MonoBehaviour
 		    }
 		    
 		    existing.SetText(message);
+		    mostRecentMessageInstance = existing;
 	    }
 
 	    if (messages[messages.Count - 1] is ConvoAIMessage ai && ai.parts.Count > 0)
@@ -235,6 +256,22 @@ public class GameConvoUIController : MonoBehaviour
 		    if (previousAiInstance.Message is ConvoAIMessage && previousAiInstance.IsFinishedDisplaying)
 		    {
 			   SetForUserTurn(); 
+		    }
+	    }
+
+	    if (slamPending)
+	    {
+		    if (mostRecentMessageInstance != null && mostRecentMessageInstance.IsFinishedDisplaying)
+		    {
+			    ProcessPendingSlam();
+		    }
+	    }
+
+	    if (salePending)
+	    {
+		    if (mostRecentMessageInstance != null && mostRecentMessageInstance.IsFinishedDisplaying)
+		    {
+			    ProcessPendingSale();
 		    }
 	    }
     }

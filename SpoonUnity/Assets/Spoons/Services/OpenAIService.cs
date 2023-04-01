@@ -80,9 +80,7 @@ public class OpenAIService
 			aiMessage.message = "....";
 		}
 
-		// TODO: event? Observable?
 		convo.OnUpdated?.Invoke();
-		// Debug.Log(aiMessage.message);
 	}
 
 	public async Promise ContinueConvo(string convoId, string message)
