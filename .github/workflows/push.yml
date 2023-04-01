@@ -98,6 +98,14 @@ jobs:
           allowDirtyBuild: true
           buildsPath: dist
 
+      - uses: KikimoraGames/itch-publish@v0.0.3
+        with:
+          butlerApiKey: ${{secrets.BUTLER_API_KEY}}
+          gameData: ./dist/${{ matrix.targetPlatform }}
+          itchUsername: channa
+          itchGameId: spoon
+          buildChannel: ${{ matrix.targetPlatform }}
+          buildNumber: ${{ needs.version.outputs.version_hash }}
       - uses: actions/upload-artifact@v2
         with:
           name: Build-${{ matrix.targetPlatform }}
