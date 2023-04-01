@@ -234,6 +234,7 @@ public class GameConvoUIController : MonoBehaviour
 		    mostRecentMessageInstance = existing;
 	    }
 
+	    
 	    if (messages[messages.Count - 1] is ConvoAIMessage ai && ai.parts.Count > 0)
 	    {
 		    var rating = ai.parts[ai.parts.Count - 1].annoyedRating;
