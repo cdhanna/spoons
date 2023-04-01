@@ -29,7 +29,6 @@ public class MessageFieldBehaviour : MonoBehaviour
 	
 	public void SetText(IConvoMessage message)
 	{
-		Debug.Log("SETTING TEXT " + message.IsPlayer + " / " + message.Message);
 		Message = message;
 		IsFinishedDisplaying = false;
 	}

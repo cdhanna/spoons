@@ -210,7 +210,6 @@ public class GameConvoUIController : MonoBehaviour
 			    existing = CreateMessage(message);
 		    }
 		    
-		    // Debug.Log("MESSAGE: " + message.IsPlayer + " / " + message.Message);
 		    existing.SetText(message);
 	    }
 
