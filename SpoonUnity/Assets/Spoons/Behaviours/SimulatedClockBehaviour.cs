@@ -23,8 +23,10 @@ namespace Spoons.Behaviours
         {
             var ctx = await BeamContext.Default.Instance;
             _stateService = ctx.GameStateService();
-            
-            startedAtSim = _stateService.data.simulatedUnixSeconds;
+
+            startedAtSim = (long)_stateService.data.startTime;
+            _stateService.data.secondsInDay = startedAtSim;
+
             startedAt = Time.realtimeSinceStartup;
             _stateService.OnStateChanged += OnStateChanged;
         }
@@ -42,13 +44,14 @@ namespace Spoons.Behaviours
             var gameTime = Time.realtimeSinceStartup;
             var diff = gameTime - startedAt;
             
-            _stateService.data.simulatedUnixSeconds = startedAtSim + (int)(diff * timeSpeed);
-            
-            var time = DateTimeOffset.FromUnixTimeSeconds(_stateService.data.simulatedUnixSeconds);
-            var formattedText = time.ToString("t");
+            _stateService.data.secondsInDay = startedAtSim + (int)(diff * timeSpeed);
+
+            var ts = TimeSpan.FromSeconds(_stateService.data.secondsInDay);
+            // TODO: handle 12 hour clock...
+            var formattedText = ts.ToString(@"hh\:mm");
             foreach (var text in displays)
             {
-                text.text = formattedText;
+                text.text = $"<mspace=1em>{formattedText}";
             }
         }
     }

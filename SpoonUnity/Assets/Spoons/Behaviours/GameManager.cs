@@ -3,6 +3,9 @@ using Beamable;
 using Beamable.Common;
 using DefaultNamespace.Spoons.Services;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Spoons.Behaviours;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -14,12 +17,9 @@ public class GameManager : MonoBehaviour
 		PlayerPrefs.DeleteAll();
 	}
 	#endif
-	
-	[Header("scene references")]
-	public GameObject mainMenuGob;
-	public GameObject instructionGob;
-	public GameObject giftGob;
 
+	[Header("scene references")] 
+	public List<EnabledOnStateChangeBehaviour> stateObjects;
 	private BeamContext _ctx;
 	// public GameObject
 
@@ -31,24 +31,24 @@ public class GameManager : MonoBehaviour
 
 		stateService.OnStateChanged += (old, next) =>
 		{
-			if (next == GameState.MENU)
-			{
-				SetForMenu();
-			}
+			SetForState(next);
 		};
 		if (stateService.State == GameState.MENU)
 		{
-			SetForMenu();
+			SetForState(stateService.State);
+
 		}
 	}
 
-	public void SetForMenu()
+	public void SetForState(GameState state)
 	{
-		var stateService = _ctx.GameStateService();
-		if (stateService.State == GameState.MENU)
+		foreach (var obj in stateObjects)
 		{
-			mainMenuGob.SetActive(true);
+			var shouldBeEnabled = obj.enableOnState == state;
+			obj.gameObject.SetActive(shouldBeEnabled);
 		}
 	}
+	
+	
 }
 

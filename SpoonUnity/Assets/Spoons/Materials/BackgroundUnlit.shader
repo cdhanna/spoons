@@ -3,13 +3,17 @@ Shader "Unlit/BackgroundUnlit"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _TopSkyTex ("TopSkyTex", 2D) = "white" {}
+        _LowSkyTex ("LowSkyTex", 2D) = "white" {}
         _X ("X", Float) = 0
+        
+        _GameTime ("Game Time", Range(0, 1)) = .5
+        
         _HouseLine ("HouseLine", Float) = 0
         _Sizes ("Sizes", Vector) = (1,1,1,1)
         _XSpeed ("XSpeed", Float) = 0
         _BackLayerOffset ("BackLayerOffset", Float) = 0
-        _Sidewalk("Sidwalk color", Color) = (.25, .5, .5, 1)
-        _Grass("Grass color", Color) = (.25, .5, .5, 1)
+        
         _Sky("Sky color", Color) = (.25, .5, .5, 1)
         _SkyLow("SkyLow color", Color) = (.25, .5, .5, 1)
         _HouseLayer1("HouseLayer1", Color) = (.25, .5, .5, 1)
@@ -45,16 +49,20 @@ Shader "Unlit/BackgroundUnlit"
             };
 
             sampler2D _MainTex;
+            sampler2D _TopSkyTex;
+            sampler2D _LowSkyTex;
             float4 _MainTex_ST;
-            float4 _Sidewalk;
             float4 _Sky;
             float4 _SkyLow;
-            float4 _Grass;
             float4 _Sizes;
             float _X;
             float _XSpeed;
             float _HouseLine;
             float _BackLayerOffset;
+
+
+            float _GameTime;
+            
             float3 _HouseLayer1;
             float3 _HouseLayer2;
             float3 _HouseLayer3;
@@ -109,76 +117,30 @@ Shader "Unlit/BackgroundUnlit"
             {
                 // sample the texture
 
+                
                 fixed4 backgroundColor = tex2D(_MainTex, i.uv);
                 // return col2;
                 
                 float4 col = 1;
+                i.uv.x *= (_ScreenParams.x / _ScreenParams.y) * .43;
                 _X *= _XSpeed;
                 i.uv.x += _X;
 
                 float groundLevel = _HouseLine;
-                // float buildingHeight = .3;
-                // float buildingTop = groundLevel + buildingHeight;
-                float g = i.uv.y < groundLevel;
-                // float b = i.uv.y < buildingTop && i.uv.y > groundLevel;
                 float house = houseLayer(float2(i.uv.x - _X*.98, i.uv.y ), groundLevel, 0);
                 float house2 = houseLayer(float2(i.uv.x - _X*.99 + 5.05, i.uv.y), groundLevel, float2(.1, .3));
                 float house3 = houseLayer(float2(i.uv.x - _X + 12.03, i.uv.y), groundLevel, float2(.2, .35));
-                // float buildingY = (i.uv.y - groundLevel) / buildingHeight;
-                // float buildingScale = 10;
-                // float2 buildingUv = float2(frac(i.uv.x * buildingScale), buildingY) *2 - 1;
-                //
-                // float roof = smoothstep(.6, .5, buildingUv.y + abs(buildingUv.x));
-                // roof *= buildingUv.y > -.2;
-                // float building = abs(buildingUv.x ) < .5 && buildingUv.y < 0;
-                // float house = building + roof;
-
                 
-                float s = 1 - g;
-                float sideWalkGradient = 1 - i.uv.y / groundLevel;
-
-                float sideWalkScale = 5;
-                // i.uv.x += sideWalkGradient * .1;
-
-                float dist = i.uv.x - .5 - _X;
-                // if (sideWalkGradient < .9)
-                {
-                    i.uv.x += dist /(clamp(0, .6,sideWalkGradient)*1);
-                }
-                
-                float2 sideWalkUv = g * float2(frac(i.uv.x * sideWalkScale), 1 - sideWalkGradient);
-                float2 sideWalkGv = float2(i.uv.x * sideWalkScale, 1 - sideWalkGradient) - sideWalkUv;
-                
-                float3 sidewalk = _Sidewalk;
-
-                if (sideWalkUv.y < .6 && sideWalkUv.y > .2)
-                sidewalk -= (sideWalkUv.x > .97) * .3;
-
-                if (sideWalkUv.y > .6)
-                {
-                    sidewalk = _Grass;
-                }
-                if (sideWalkUv.y < .2)
-                {
-                    sidewalk = 1 - (sideWalkUv.y / .2) ;
-                    sidewalk *= float3(.5, .5, .6);
-                }
-                sidewalk *= .2 + (1 - sideWalkUv.y);
-                
-                col.rgb = g * sidewalk;
                 col.rgb = 0;
 
                 float skyY = (i.uv.y - groundLevel) / (1 - groundLevel);
-                // skyY = i.uv.y;
-                col.rgb = lerp(_SkyLow, _Sky, skyY);
-                // return col;
-                // return 0;
 
-                // return col2.a;
+                float2 skyUv = float2(_GameTime, 0);
+                float4 skyLow = tex2D(_LowSkyTex, skyUv);
+                float4 skyHigh = tex2D(_TopSkyTex, skyUv);
                 
-                // return lerp(col, col2, .5);
-                // col.rgb = s * skyY;
-
+                col.rgb = lerp(skyLow, skyHigh, skyY).rgb;
+                // col.rgb = 1;
                 col.rgb = (1-house3) * col.rgb +  _HouseLayer3 * house3;
                 col.rgb = (1-house2) * col.rgb +  _HouseLayer2 * house2;
                 col.rgb = (1-house) * col.rgb +  _HouseLayer1 * house;

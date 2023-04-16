@@ -80,6 +80,11 @@ public class MessageFieldBehaviour : MonoBehaviour
 				messageText.SetText(next);
 
 				messageText.ForceMeshUpdate();
+				if (transform.parent is RectTransform parentRect)
+				{
+					parentRect.ForceUpdateRectTransforms();
+				}
+
 			}
 			IsFinishedDisplaying = messageText.text == desiredText;
 

@@ -6,6 +6,7 @@ using SpoonsCommon;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +18,7 @@ public class GameConvoUIController : MonoBehaviour
 	public RectTransform scrollArea;
 	public Button giveUpButton;
 	public Button submitButton;
+	public Button copyButton;
 	public GameObject dialogPanel;
 	public GameObject dialogButtonStrip;
 	public Image backdropImage;
@@ -59,8 +61,11 @@ public class GameConvoUIController : MonoBehaviour
 	public bool salePending;
 	public FaceConfig faceConfig;
 	private Dictionary<int, FaceBehaviour> _ratingToFace = new Dictionary<int, FaceBehaviour>();
-	public List<FaceBehaviour> _allFaces = new List<FaceBehaviour>(); 
+	public List<FaceBehaviour> _allFaces = new List<FaceBehaviour>();
 
+	private TextMeshProUGUI copyButtonText;
+	private string initialCopyButtonText;
+	
     // Start is called before the first frame update
     async void Start()
     {
@@ -72,6 +77,10 @@ public class GameConvoUIController : MonoBehaviour
 		    face.gameObject.SetActive(false);
 		    _ratingToFace[rating] = face;
 	    }
+	    
+	    copyButton.onClick.AddListener(HandleCopyButton);
+	    copyButtonText = copyButton.GetComponentInChildren<TextMeshProUGUI>();
+	    initialCopyButtonText = copyButtonText.text;
 	    
 	    userInputField.onSubmit.AddListener(HandleUserSubmission);
 	    userInputField.onValueChanged.AddListener((x) =>
@@ -100,6 +109,40 @@ public class GameConvoUIController : MonoBehaviour
 	    };
     }
 
+    private StringBuilder copyBuilder = new StringBuilder();
+    void HandleCopyButton()
+    {
+	    
+	    IEnumerator Show()
+	    {
+		    copyButtonText.text = "*copied*";
+		    yield return new WaitForSecondsRealtime(.2f);
+		    copyButtonText.text = initialCopyButtonText;
+	    }
+
+	    copyBuilder.Clear();
+	    foreach (var message in convo.ProcessConvo())
+	    {
+		    if (message.IsPlayer)
+		    {
+			    copyBuilder.Append("[PLAYER] ");
+		    }
+		    else
+		    {
+			    copyBuilder.Append("[AI] ");
+		    }
+
+		    copyBuilder.Append(message.Message);
+		    copyBuilder.Append("\n");
+		    
+		    GUIUtility.systemCopyBuffer = copyBuilder.ToString();
+
+	    }
+	    
+	    StartCoroutine(Show());
+	    
+    }
+    
     void Clear()
     {
 	    var submitText = submitButton.GetComponentInChildren<TextMeshProUGUI>();
@@ -342,7 +385,10 @@ public class GameConvoUIController : MonoBehaviour
 	    var prefab = message.IsPlayer ? messagePrefab : aiMessagePrefab;
 	    var box = Instantiate(prefab, scrollArea);
 	    box.SetText(message);
-	    box.transform.DOPunchScale(new Vector3(0, .2f, 0), .5f);
+	    box.transform.DOPunchScale(new Vector3(0, .2f, 0), .5f).OnComplete(() =>
+	    {
+		    scrollArea.ForceUpdateRectTransforms();
+	    });
 
 	    messageInstances.Add(box);
 	    return box;

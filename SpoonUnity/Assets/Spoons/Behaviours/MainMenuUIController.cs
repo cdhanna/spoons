@@ -4,11 +4,12 @@ using DefaultNamespace.Spoons.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Spoons.Behaviours;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuUIController : MonoBehaviour
+public class MainMenuUIController : StandardBehaviour
 {
 	public Button playButton;
 	public Button quitButton;
@@ -35,10 +36,9 @@ public class MainMenuUIController : MonoBehaviour
 	    playText.text = data.hasGame ? "CONTINUE CAREER" : "NEW CAREER";
     }
 
-    async void Start()
+    protected override async Promise OnStart()
     {
 	    await RefreshText();
-	    var ctx = await BeamContext.Default.Instance;
 	    ctx.GameStateService().OnStateChanged += (old, next) =>
 	    {
 		    var _ = RefreshText();
@@ -110,6 +110,6 @@ public class MainMenuUIController : MonoBehaviour
 
     public void HandleQuit()
     {
-	    Application.Quit();
+	    ctx.GameStateService().GoToDesktop();
     }
 }

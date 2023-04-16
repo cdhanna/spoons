@@ -18,6 +18,7 @@ public class GameStateService : IServiceStorable
 	{
 		_playerService = playerService;
 		State = GameState.MENU; // TODO: config?
+		// State = GameState.WALKING;
 		// GotoState(GameState.WALKING);
 	}
 	
@@ -49,7 +50,6 @@ public class GameStateService : IServiceStorable
 	
 	public void GoToMenu()
 	{
-		if (State != GameState.WALKING) return;
 		GotoState(GameState.MENU);
 	}
 
@@ -70,6 +70,10 @@ public class GameStateService : IServiceStorable
 		data = new GameData();
 	}
 
+	public void GoToDesktop()
+	{
+		GotoState(GameState.DESKTOP);
+	}
 }
 
 public enum GameState
@@ -77,6 +81,8 @@ public enum GameState
 	MENU,
 	WALKING,
 	TALKING,
+	DESKTOP,
+	DRAWING,
 }
 
 [Serializable]
@@ -88,5 +94,11 @@ public class GameData
 	public bool hasTie;
 	public int sales;
 	public int slams;
-	public long simulatedUnixSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+	public float secondsInDay;
+	public float startTime = 60 * 60 * 5; // 5am
+	public float endTime = 60 * 60 * 19; // 7pm
+
+
+	public float DayRatio => (secondsInDay - startTime) / (endTime - startTime);
 }
